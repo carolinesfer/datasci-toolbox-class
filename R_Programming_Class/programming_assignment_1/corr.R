@@ -15,6 +15,7 @@ corr <- function(directory, threshold = 0) {
   
   # find out which files meet the threshold
   abovethresh <- completefiles$nobs > threshold
+  mycors <- numeric(length = sum(abovethresh))
   
   # make a char vector of all the file names in the format 001.csv
   filenames <- sprintf("%03d.csv", completefiles$id[abovethresh])
@@ -22,8 +23,11 @@ corr <- function(directory, threshold = 0) {
   for (i in seq_along(filenames)) {
     data <- read.csv(file.path(directory, filenames[i]))
     # get only the complete cases for the ith file
-    complete <- complete.cases(data)
+    good <- complete.cases(data)
+    comdata <- data[good, ][]
     
-    
+    mycors[i] <- cor(comdata$sulfate, comdata$nitrate)
   }
+  
+  mycors
 }
